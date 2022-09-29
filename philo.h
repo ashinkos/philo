@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 02:19:30 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/29 04:54:57 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,10 @@ typedef struct s_philo
 
 int		ft_atoi(const char *str);
 t_data	*fill_argument(int ac, char **av);
+int		is_valid_string(const char *str);
+t_data	*fill_argument(int ac, char **av);
+void	print_data(t_data *data);
+int		check_arguments(t_data *data);
+void	error_arguments(void);
 
 #endif

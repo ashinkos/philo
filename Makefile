@@ -1,6 +1,6 @@
 NAME= philo
 
-SRC = philo.c \
+SRC = philo.c fill_arguments.c\
 
 CC = cc
 FLAGS= -Wall -Werror -Wextra -g3
