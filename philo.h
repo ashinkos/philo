@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/28 21:18:33 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/29 00:41:38 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,9 @@ typedef struct s_plist
 	unsigned int	nbr_eat;
 
 }		t_plist;
+
+int		ft_atoi(const char *str);
+t_plist	*fill_argument(int ac, char **av);
+
 
 #endif
