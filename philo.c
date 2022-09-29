@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 05:11:01 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/29 05:34:43 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*routine(void *p)
 
 	philo = p;
 	while (1)
-	{	
+	{	printf("--------------------------\n");
 		usleep(2e6);
 		printf("hello from philo numbre %d\n", philo->index);
 	}
@@ -46,7 +46,9 @@ void	fill_philos(t_data *data)
 		data->philos[i].index = i;
 		data->philos[i].last_meal = get_microsec();
 		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]))
-			exit (1);
+			exit(1);
+		if (pthread_mutex_init(&data->philos[i].fork, NULL))
+			exit(1);
 		// printf(" philo %d\n", data->philos[i].index);
 		i++;
 	}
@@ -62,11 +64,14 @@ int	main(int ac, char **av)
 	data = fill_argument(ac, av);
 	print_data(data);
 	if (check_arguments(data))
-		error_arguments();
-	fill_philos(data);
-	while(1)
 	{
-		
+		free(data);
+		error_arguments();
 	}
-	// clea¬nup();
+	fill_philos(data);
+	while (1)
+	{
+		//supervisor
+	}
+	// cleanup();
 }
