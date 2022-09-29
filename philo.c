@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 01:29:38 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/29 03:03:08 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,66 +48,112 @@ int	ft_atoi(const char *str)
 	return (nb);
 }
 
-t_plist	*fill_argument(int ac, char **av)
+t_data	*fill_argument(int ac, char **av)
 {
-	t_plist	*lst;
+	t_data	*data;
 
-	lst = malloc(sizeof(t_plist));
-	if (!lst)
-		return (lst);
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (data);
 	if (ac > 4)
 	{
-		lst->nbr_philo = ft_atoi(av[1]);
-		lst->die = ft_atoi(av[2]);
-		lst->eat = ft_atoi(av[3]);
-		lst->sleep = ft_atoi(av[4]);
-		lst->nbr_eat = -1;
+		data->nbr_philo = ft_atoi(av[1]);
+		data->die = ft_atoi(av[2]);
+		data->eat = ft_atoi(av[3]);
+		data->sleep = ft_atoi(av[4]);
+		data->nbr_eat = -1;
 	}
 	if (ac == 6)
-		lst->nbr_eat = ft_atoi(av[5]);
-	return (lst);
+		data->nbr_eat = ft_atoi(av[5]);
+	return (data);
 }
 
-void	print_lst(t_plist *lst)
+void	print_data(t_data *data)
 {
-	printf("number of philo : %d \n", lst->nbr_philo);
-	printf("time to die : %d \n", lst->die);
-	printf("time to eat : %d \n", lst->eat);
-	printf("time to sleep : %d \n", lst->sleep);
-	printf("number of time to eat : %d \n", lst->nbr_eat);
+	printf("number of philo : %d \n", data->nbr_philo);
+	printf("time to die : %d \n", data->die);
+	printf("time to eat : %d \n", data->eat);
+	printf("time to sleep : %d \n", data->sleep);
+	printf("number of time to eat : %d \n", data->nbr_eat);
 }
 
 void	error_arguments(void)
 {
-	printf("nombre of argument is invalid\n");
+	printf("arguments are invalid\n");
 	exit(1);
 }
 
-int	check_arguments(t_plist *lst)
+int	check_arguments(t_data *data)
 {
-	if (lst->nbr_philo == 0)
+	if (data->nbr_philo == 0)
 		return (1);
-	if (lst->nbr_eat == 0)
+	if (data->nbr_eat == 0)
 		return (1);
-	if (lst->die < 60)
+	if (data->die < 60)
 		return (1);
-	if (lst->eat < 60)
+	if (data->eat < 60)
 		return (1);
-	if (lst->sleep < 60)
+	if (data->sleep < 60)
 		return (1);
 	return (0);
 }
 
+unsigned long get_microsec ()
+{
+	struct timeval	rtk;
+
+	gettimeofday(&rtk, NULL);
+	return (rtk.tv_sec * 1000 + rtk.tv_usec);
+}
+
+void	*routine(void *p)
+{
+	t_philo *	philo;
+
+	philo = p;
+	while (1)
+	{	
+		usleep(2e6);
+		printf("hello from philo numbre %d\n", philo->index);
+}
+	return (0);
+}
+// next fork_index  = (fork_index + 1) % n_philo
+
+void	fill_philos(t_data *data)
+{
+	unsigned int	i;
+
+	data->philos = malloc(data->nbr_philo * sizeof(t_philo));
+	i = 0;
+	while (i < data->nbr_philo)
+	{
+		data->philos[i].data = data;
+		data->philos[i].index = i;
+		data->philos[i].last_meal = get_microsec();
+		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]))
+			exit (1);
+		printf(" philo %d\n", data->philos[i].index);
+
+		i++;
+	}
+}
+
 int	main(int ac, char **av)
 {
-	t_plist	*lst;
+	t_data	*data;
 
-	lst = NULL;
+	data = NULL;
 	if (ac < 5 || ac > 6)
 		error_arguments();
-	lst = fill_argument(ac, av);
-	print_lst(lst);
-	if (check_arguments(lst))
+	data = fill_argument(ac, av);
+	print_data(data);
+	if (check_arguments(data))
 		error_arguments();
-	av[0] = av[0]++;
+	fill_philos(data);
+	while(1)
+	{
+		
+	}
+	// clea¬nup();
 }

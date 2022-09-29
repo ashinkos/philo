@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 00:41:38 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/29 02:19:30 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,27 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_plist
+struct	s_philo;
+typedef struct s_data
 {
 	unsigned int	nbr_philo;
 	unsigned int	die;
 	unsigned int	eat;
 	unsigned int	sleep;
 	unsigned int	nbr_eat;
+	struct s_philo	*philos;
+}		t_data;
 
-}		t_plist;
+typedef struct s_philo
+{
+	t_data			*data;
+	unsigned int	index;
+	unsigned long	last_meal;
+	pthread_t		thread;
+	pthread_mutex_t	fork;
+}		t_philo;
 
 int		ft_atoi(const char *str);
-t_plist	*fill_argument(int ac, char **av);
-
+t_data	*fill_argument(int ac, char **av);
 
 #endif
