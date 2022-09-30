@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 03:27:46 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 20:14:35 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,18 @@ void	print_situation(char c, t_philo *philo)
 	unsigned long	timestamp;
 
 	pthread_mutex_lock(&philo->data->print_mutex);
+	timestamp = get_time_ms() - philo->data->time_launch;
 	if (c == 'f')
-	{
-		timestamp = get_time_ms() - philo->data->time_launch;
-		printf("%lu %d has taken a fork", timestamp, philo->index);
-	}
+		printf("%lu %d has taken a fork\n", timestamp, philo->index);
 	if (c == 'e')
-	{
-		timestamp = get_time_ms() - philo->data->time_launch;
-		printf("%lu %d is eating", timestamp, philo->index);
-	}
+		printf("%lu %d is eating\n", timestamp, philo->index);
 	if (c == 's')
-	{
-		timestamp = get_time_ms() - philo->data->time_launch;
-		printf("%lu %d is sleeping", timestamp, philo->index);
-	}
+		printf("%lu %d is sleeping\n", timestamp, philo->index);
 	if (c == 't')
-	{
-		timestamp = get_time_ms() - philo->data->time_launch;
-		printf("%lu %d is thinking", timestamp, philo->index);
-	}
+		printf("%lu %d is thinking\n", timestamp, philo->index);
 	if (c == 'd')
-	{
-		timestamp = get_time_ms() - philo->data->time_launch;
-		printf("%lu %d died", timestamp, philo->index);
-	}
+		printf("%lu %d died\n", timestamp, philo->index);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 void	*routine_philo(void *p)
@@ -61,18 +48,18 @@ void	*routine_philo(void *p)
 	while (1)
 	{	
 		second_fork = philo->index % philo->data->nbr_philo + 1;
-		// // usleep(2e6);
-		// sleep (10);
-		// printf("philo number %d : my seconde fork is %d \n", philo->index, second_fork);
 		pthread_mutex_lock(&philo->fork);
 		print_situation('f', philo);
 		pthread_mutex_lock(&philo->data->philos[second_fork - 1].fork);
 		print_situation('f', philo);
 		print_situation('e', philo);
+		philo->last_meal = get_time_ms() - philo->last_meal;
 		usleep(1000 * philo->data->eat);
 		pthread_mutex_unlock(&philo->fork);
-		pthread_mutex_unlock(&philo->data->philos + second_fork);
-		
+		pthread_mutex_unlock(&philo->data->philos[second_fork - 1].fork);
+		print_situation('s', philo);
+		usleep(1000 * philo->data->sleep);
+		print_situation('t', philo);
 	}
 	return (0);
 }
@@ -94,7 +81,6 @@ void	fill_philos(t_data *data)
 			exit(1);
 		if (pthread_create(&data->philos[i].thread, NULL, routine_philo, &data->philos[i]))
 			exit(1);
-		// printf(" philo %d\n", data->philos[i].index);
 		i++;
 	}
 }
@@ -107,7 +93,7 @@ int	main(int ac, char **av)
 	if (ac < 5 || ac > 6)
 		error_arguments();
 	data = fill_argument(ac, av);
-	print_data(data);
+	// print_data(data);
 	if (check_arguments(data))
 	{
 		free(data);
