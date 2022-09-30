@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 05:04:19 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 05:31:38 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 02:33:24 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ t_data	*fill_argument(int ac, char **av)
 		data->die = ft_atoi(av[2]);
 		data->eat = ft_atoi(av[3]);
 		data->sleep = ft_atoi(av[4]);
+		if (pthread_mutex_init(&data->print_mutex, NULL))
+			exit(1);
 		data->nbr_eat = -1;
 	}
 	if (ac == 6)

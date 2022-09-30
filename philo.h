@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/29 05:30:42 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 02:49:30 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_data
 	unsigned int	eat;
 	unsigned int	sleep;
 	unsigned int	nbr_eat;
+	pthread_mutex_t	print_mutex;
+	unsigned long	time_launch;
 	struct s_philo	*philos;
 }		t_data;
 
@@ -47,6 +49,6 @@ void			print_data(t_data *data);
 int				check_arguments(t_data *data);
 void			error_arguments(void);
 
-unsigned long	get_microsec(void);
+unsigned long	get_time_ms(void);
 
 #endif
