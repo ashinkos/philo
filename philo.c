@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 20:14:35 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 23:49:37 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	print_situation(char c, t_philo *philo)
 		printf("%lu %d is sleeping\n", timestamp, philo->index);
 	if (c == 't')
 		printf("%lu %d is thinking\n", timestamp, philo->index);
-	if (c == 'd')
-		printf("%lu %d died\n", timestamp, philo->index);
+	// if (c == 'd')
+	// 	printf("%lu %d died\n", timestamp, philo->index);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
@@ -53,8 +53,9 @@ void	*routine_philo(void *p)
 		pthread_mutex_lock(&philo->data->philos[second_fork - 1].fork);
 		print_situation('f', philo);
 		print_situation('e', philo);
-		philo->last_meal = get_time_ms() - philo->last_meal;
+		philo->last_meal = get_time_ms() - philo->data->time_launch;
 		usleep(1000 * philo->data->eat);
+		philo->data->nbr_eat--;
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->data->philos[second_fork - 1].fork);
 		print_situation('s', philo);
@@ -63,7 +64,6 @@ void	*routine_philo(void *p)
 	}
 	return (0);
 }
-// next fork_index  = (fork_index ) % n_philo + 1
 
 void	fill_philos(t_data *data)
 {
@@ -81,7 +81,20 @@ void	fill_philos(t_data *data)
 			exit(1);
 		if (pthread_create(&data->philos[i].thread, NULL, routine_philo, &data->philos[i]))
 			exit(1);
-		i++;
+		i = i + 2;
+	}
+	usleep(100);
+	i = 1;
+	while (i < data->nbr_philo)
+	{
+		data->philos[i].data = data;
+		data->philos[i].index = i + 1;
+		data->philos[i].last_meal = get_time_ms();
+		if (pthread_mutex_init(&data->philos[i].fork, NULL))
+			exit(1);
+		if (pthread_create(&data->philos[i].thread, NULL, routine_philo, &data->philos[i]))
+			exit(1);
+		i = i + 2;
 	}
 }
 
@@ -93,7 +106,6 @@ int	main(int ac, char **av)
 	if (ac < 5 || ac > 6)
 		error_arguments();
 	data = fill_argument(ac, av);
-	// print_data(data);
 	if (check_arguments(data))
 	{
 		free(data);
@@ -105,4 +117,5 @@ int	main(int ac, char **av)
 		//supervisor
 	}
 	// cleanup();
+	// a ne pas oublier de remplacer exit par return, it's forbidden
 }

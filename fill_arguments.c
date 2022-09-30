@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 05:04:19 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 02:33:24 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 23:47:11 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,6 @@ t_data	*fill_argument(int ac, char **av)
 	return (data);
 }
 
-void	print_data(t_data *data)
-{
-	printf("number of philo : %d \n", data->nbr_philo);
-	printf("time to die : %d \n", data->die);
-	printf("time to eat : %d \n", data->eat);
-	printf("time to sleep : %d \n", data->sleep);
-	printf("number of time to eat : %d \n", data->nbr_eat);
-}
-
 void	error_arguments(void)
 {
 	printf("arguments are invalid\n");
@@ -98,4 +89,13 @@ int	check_arguments(t_data *data)
 	if (data->sleep < 60)
 		return (1);
 	return (0);
+}
+
+void	print_data(t_data *data)
+{
+	printf("number of philo : %d \n", data->nbr_philo);
+	printf("time to die : %d \n", data->die);
+	printf("time to eat : %d \n", data->eat);
+	printf("time to sleep : %d \n", data->sleep);
+	printf("number of time to eat : %d \n", data->nbr_eat);
 }

@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 02:49:30 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/09/30 23:52:53 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,8 @@ int				check_arguments(t_data *data);
 void			error_arguments(void);
 
 unsigned long	get_time_ms(void);
+void			print_situation(char c, t_philo *philo);
+void			*routine_philo(void *p);
+void			fill_philos(t_data *data);
 
 #endif
