@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 01:16:50 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 04:53:56 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ unsigned long	get_time_ms(void);
 void			print_situation(char c, t_philo *philo);
 void			*routine_philo(void *p);
 void			fill_philos(t_data *data);
+
+void			my_sleep(unsigned int tms);
 
 #endif
