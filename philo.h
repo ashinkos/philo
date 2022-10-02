@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 20:34:33 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 23:20:11 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	l_meal_mutex;
+	pthread_mutex_t	n_eat_mutex;
 }		t_philo;
 
 int				ft_atoi(const char *str);

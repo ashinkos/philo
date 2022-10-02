@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 20:57:33 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 00:00:47 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,13 @@ void	*routine_philo(void *p)
 		pthread_mutex_lock(&philo->l_meal_mutex);
 		philo->last_meal = get_time_ms() - philo->data->time_launch;
 		pthread_mutex_unlock(&philo->l_meal_mutex);
-		// usleep(1000 * philo->data->eat);
 		my_sleep(1000 * philo->data->eat);
-		// pthread_mutex_lock(&philo->l_meal_mutex);
-		pthread_mutex_lock(&philo->l_meal_mutex);
+		pthread_mutex_lock(&philo->n_eat_mutex);
 		philo->nbr_eat--;
-		pthread_mutex_unlock(&philo->l_meal_mutex);
-		// pthread_mutex_unlock(&philo->l_meal_mutex);
-		// printf("last meal of %d is : %lu || number of eats needed is : %d\n", philo->index, philo->last_meal, philo->nbr_eat);
+		pthread_mutex_unlock(&philo->n_eat_mutex);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->data->philos[second_fork - 1].fork);
 		print_situation('s', philo);
-		// usleep(1000 * philo->data->sleep);
 		my_sleep(1000 * philo->data->sleep);
 		print_situation('t', philo);
 	}
@@ -64,6 +59,8 @@ void	fill_philos(t_data *data)
 			exit(1);
 		if (pthread_mutex_init(&data->philos[i].l_meal_mutex, NULL))
 			exit(1);
+		if (pthread_mutex_init(&data->philos[i].n_eat_mutex, NULL))
+			exit(1);
 		if (pthread_create(&data->philos[i].thread, NULL, routine_philo, &data->philos[i]))
 			exit(1);
 		if (pthread_detach(data->philos[i].thread))
@@ -82,6 +79,8 @@ void	fill_philos(t_data *data)
 			exit(1);
 		if (pthread_mutex_init(&data->philos[i].l_meal_mutex, NULL))
 			exit(1);
+		if (pthread_mutex_init(&data->philos[i].n_eat_mutex, NULL))
+			exit(1);
 		if (pthread_create(&data->philos[i].thread, NULL, routine_philo, &data->philos[i]))
 			exit(1);
 		if (pthread_detach(data->philos[i].thread))
@@ -97,17 +96,19 @@ int	stop_nbr_eat(t_data *data)
 	i = 0;
 	while (i < data->nbr_philo)
 	{
-		pthread_mutex_lock(&data->philos[i].l_meal_mutex);
+		pthread_mutex_lock(&data->philos[i].n_eat_mutex);
 		if (data->philos[i].nbr_eat > 0)
+		{
+			pthread_mutex_unlock(&data->philos[i].n_eat_mutex);
 			return (0);
-		pthread_mutex_unlock(&data->philos[i].l_meal_mutex);
+		}
 		i++;
 	}
 	usleep (500);
 	return (1);
 }
 
-int	stop_philo_died(t_data *data)
+int	stop_philos_died(t_data *data)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -122,8 +123,6 @@ int	stop_philo_died(t_data *data)
 		{
 			pthread_mutex_lock(&data->print_mutex);
 			timestamp = get_time_ms() - data->time_launch;
-			printf("%lu %lu died\n", timestamp, data->philos[i].last_meal);
-			// printf("%lu %lu died\n", timestamp, get_time_ms());
 			printf("%lu %d died\n", timestamp, data->philos[i].index);
 			return (1);
 		}
@@ -133,8 +132,6 @@ int	stop_philo_died(t_data *data)
 		{	
 			pthread_mutex_lock(&data->print_mutex);
 			timestamp = get_time_ms() - data->time_launch;
-			printf("%lu %lu died\n", timestamp, data->philos[j].last_meal);
-			// printf("%lu %lu died\n", timestamp, get_time_ms());
 			printf("%lu %d died\n", timestamp, data->philos[j].index);
 			return (1);
 		}
@@ -142,7 +139,6 @@ int	stop_philo_died(t_data *data)
 		i++;
 		j--;
 	}
-	printf("herre\n");
 	return (0);
 }
 
@@ -160,15 +156,19 @@ int	main(int ac, char **av)
 		if (error_arguments())
 			return (1);
 	}
-	print_data(data);
+	if (data->nbr_philo == 1)
+	{
+		printf("0 1 has taken a fork\n");
+		my_sleep(1000 * (data->die));
+		printf("%d 1 died\n", data->die);
+		return (0);
+	}
 	fill_philos(data);
 	while (1)
 	{
-		if (stop_philo_died(data))
+		if (stop_philos_died(data) || (data->nbr_eat > 0 && stop_nbr_eat(data)))
 			return (0);
-		if (data->nbr_eat > 0 && stop_nbr_eat(data))
-			return (0);
+		// if (data->nbr_eat > 0 && stop_nbr_eat(data))
+		// 	return (0);
 	}
-	// cleanup();
-	// a ne pas oublier de remplacer exit par return, it's forbidden
 }
