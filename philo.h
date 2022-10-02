@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 04:53:56 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 20:34:33 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_philo
 	int				nbr_eat;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
+	pthread_mutex_t	l_meal_mutex;
 }		t_philo;
 
 int				ft_atoi(const char *str);
@@ -49,13 +50,12 @@ int				is_valid_string(const char *str);
 t_data			*fill_argument(int ac, char **av);
 void			print_data(t_data *data);
 int				check_arguments(t_data *data);
-void			error_arguments(void);
+int				error_arguments(void);
 
 unsigned long	get_time_ms(void);
 void			print_situation(char c, t_philo *philo);
+void			my_sleep(unsigned int tms);
 void			*routine_philo(void *p);
 void			fill_philos(t_data *data);
-
-void			my_sleep(unsigned int tms);
 
 #endif

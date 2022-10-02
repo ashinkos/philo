@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 05:04:19 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 00:51:32 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 19:49:54 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ t_data	*fill_argument(int ac, char **av)
 	return (data);
 }
 
-void	error_arguments(void)
+int	error_arguments(void)
 {
 	printf("arguments are invalid\n");
-	exit(1);
+	return (1);
 }
 
 int	check_arguments(t_data *data)
