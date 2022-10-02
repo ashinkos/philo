@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 23:52:53 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 01:16:50 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ typedef struct s_data
 	unsigned int	die;
 	unsigned int	eat;
 	unsigned int	sleep;
-	unsigned int	nbr_eat;
+	int				nbr_eat;
+	int				philos_eat;
 	pthread_mutex_t	print_mutex;
 	unsigned long	time_launch;
 	struct s_philo	*philos;
@@ -37,6 +38,7 @@ typedef struct s_philo
 	t_data			*data;
 	unsigned int	index;
 	unsigned long	last_meal;
+	int				nbr_eat;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
 }		t_philo;

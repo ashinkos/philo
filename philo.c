@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/09/30 23:49:37 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/02 02:03:07 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	*routine_philo(void *p)
 		print_situation('e', philo);
 		philo->last_meal = get_time_ms() - philo->data->time_launch;
 		usleep(1000 * philo->data->eat);
-		philo->data->nbr_eat--;
+		// pthread_mutex_lock(&philo->data->print_mutex);
+		philo->nbr_eat--;
+		// pthread_mutex_unlock(&philo->data->print_mutex);
+		// printf("last meal of %d is : %lu || number of eats needed is : %d\n", philo->index, philo->last_meal, philo->nbr_eat);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->data->philos[second_fork - 1].fork);
 		print_situation('s', philo);
@@ -76,6 +79,7 @@ void	fill_philos(t_data *data)
 	{
 		data->philos[i].data = data;
 		data->philos[i].index = i + 1;
+		data->philos[i].nbr_eat = data->nbr_eat;
 		data->philos[i].last_meal = get_time_ms();
 		if (pthread_mutex_init(&data->philos[i].fork, NULL))
 			exit(1);
@@ -89,6 +93,7 @@ void	fill_philos(t_data *data)
 	{
 		data->philos[i].data = data;
 		data->philos[i].index = i + 1;
+		data->philos[i].nbr_eat = data->nbr_eat / data->nbr_philo;
 		data->philos[i].last_meal = get_time_ms();
 		if (pthread_mutex_init(&data->philos[i].fork, NULL))
 			exit(1);
@@ -96,6 +101,21 @@ void	fill_philos(t_data *data)
 			exit(1);
 		i = i + 2;
 	}
+}
+
+int	stop_nbr_eat(t_data *data)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < data->nbr_philo)
+	{
+		if (data->philos[i].nbr_eat > 0)
+			return (0);
+		i++;
+	}
+	usleep (100);
+	return (1);
 }
 
 int	main(int ac, char **av)
@@ -111,11 +131,16 @@ int	main(int ac, char **av)
 		free(data);
 		error_arguments();
 	}
+	print_data(data);
 	fill_philos(data);
 	while (1)
 	{
-		//supervisor
+		// stop_pihlo_dies();
+		if (data->nbr_eat > 0 && stop_nbr_eat(data))
+			return (0);
 	}
+	while (data < data + 200)
+		int i = 0;
 	// cleanup();
 	// a ne pas oublier de remplacer exit par return, it's forbidden
 }
