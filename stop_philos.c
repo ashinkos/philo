@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 03:05:54 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 03:16:43 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 19:20:43 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	stop_philo_died(t_data *data)
 
 	i = 0;
 	j = data->nbr_philo - 1;
-	while (i < data->nbr_philo / 2 && j > data->nbr_philo / 2)
+	while (i < data->nbr_philo / 2 && j >= data->nbr_philo / 2)
 	{
 		pthread_mutex_lock(&data->philos[i].l_meal_mutex);
 		if (check_philo_died(data, i))

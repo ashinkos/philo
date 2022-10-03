@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 03:34:50 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 20:06:41 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	*routine_philo(void *p)
 	unsigned int	second_fork;
 
 	philo = p;
+	second_fork = philo->index % philo->data->nbr_philo + 1;
 	while (1)
 	{	
-		second_fork = philo->index % philo->data->nbr_philo + 1;
 		pthread_mutex_lock(&philo->fork);
 		print_situation('f', philo);
 		pthread_mutex_lock(&philo->data->philos[second_fork - 1].fork);
@@ -47,8 +47,8 @@ int	fill_philos_part1(t_data *data, int i)
 	data->philos[i].index = i + 1;
 	data->philos[i].nbr_eat = data->nbr_eat;
 	data->philos[i].last_meal = get_time_ms() - data->time_launch;
-	if (pthread_mutex_init(&data->philos[i].fork, NULL))
-		return (1);
+	// if (pthread_mutex_init(&data->philos[i].fork, NULL))
+	// 	return (1);
 	if (pthread_mutex_init(&data->philos[i].l_meal_mutex, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->philos[i].n_eat_mutex, NULL))
@@ -66,9 +66,9 @@ int	fill_philos_part2(t_data *data, int i)
 	data->philos[i].data = data;
 	data->philos[i].index = i + 1;
 	data->philos[i].nbr_eat = data->nbr_eat / data->nbr_philo;
-	data->philos[i].last_meal = get_time_ms();
-	if (pthread_mutex_init(&data->philos[i].fork, NULL))
-		return (1);
+	data->philos[i].last_meal = get_time_ms() - data->time_launch;
+	// if (pthread_mutex_init(&data->philos[i].fork, NULL))
+	// 	return (1);
 	if (pthread_mutex_init(&data->philos[i].l_meal_mutex, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->philos[i].n_eat_mutex, NULL))
@@ -84,10 +84,18 @@ int	fill_philos_part2(t_data *data, int i)
 int	fill_philos(t_data *data)
 {
 	unsigned int	i;
+	unsigned int	j;
 
 	data->philos = malloc(data->nbr_philo * sizeof(t_philo));
 	i = 0;
 	data->time_launch = get_time_ms();
+	j = 0;
+	while (j < data->nbr_philo)
+	{
+		if (pthread_mutex_init(&data->philos[j].fork, NULL))
+			return (1);
+		j++;
+	}
 	while (i < data->nbr_philo)
 	{
 		if (fill_philos_part1(data, i))
