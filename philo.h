@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:53 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 18:48:32 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 20:50:58 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ unsigned long	get_time_ms(void);
 void			print_situation(char c, t_philo *philo);
 void			my_sleep(unsigned int tms);
 void			print_fork_eat(t_philo *philo);
+int				init_mutex_fork(t_data *data);
 
 void			*routine_philo(void *p);
 int				fill_philos(t_data *data);

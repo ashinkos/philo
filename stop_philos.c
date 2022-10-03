@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 03:05:54 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 19:20:43 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 20:51:22 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,20 @@ int	stop_philo_died(t_data *data)
 		pthread_mutex_unlock(&data->philos[j].l_meal_mutex);
 		i++;
 		j--;
+	}
+	return (0);
+}
+
+int	init_mutex_fork(t_data *data)
+{
+	unsigned int	j;
+
+	j = 0;
+	while (j < data->nbr_philo)
+	{
+		if (pthread_mutex_init(&data->philos[j].fork, NULL))
+			return (1);
+		j++;
 	}
 	return (0);
 }
