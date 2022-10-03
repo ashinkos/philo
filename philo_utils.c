@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 19:46:21 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/02 19:46:51 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 02:14:51 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	print_situation(char c, t_philo *philo)
 		printf("%lu %d is sleeping\n", timestamp, philo->index);
 	if (c == 't')
 		printf("%lu %d is thinking\n", timestamp, philo->index);
-	// if (c == 'd')
-	// 	printf("%lu %d died\n", timestamp, philo->index);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
@@ -47,4 +45,23 @@ void	my_sleep(unsigned int tms)
 	usleep(tms - 30000);
 	while (get_time_ms() < old_time + tms / 1000)
 		;
+}
+
+int	stop_nbr_eat(t_data *data)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < data->nbr_philo)
+	{
+		pthread_mutex_lock(&data->philos[i].n_eat_mutex);
+		if (data->philos[i].nbr_eat > 0)
+		{
+			pthread_mutex_unlock(&data->philos[i].n_eat_mutex);
+			return (0);
+		}
+		i++;
+	}
+	usleep (500);
+	return (1);
 }
