@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:46:47 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 02:19:57 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 02:56:39 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	fill_philos(t_data *data)
 	}
 	return (0);
 }
-int	philo_died(t_data *data, int i);
+// int	philo_died(t_data *data, int i);
 int	stop_philo_died(t_data *data)
 {
 	unsigned int	i;
@@ -163,7 +163,9 @@ int	main(int ac, char **av)
 		return (1);
 	while (1)
 	{
-		if (stop_philo_died(data) || (data->nbr_eat > 0 && stop_nbr_eat(data)))
+		if (stop_philo_died(data))
+			return (0);
+		if (data->nbr_eat > 0 && stop_nbr_eat(data))
 			return (0);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aaouni <aaouni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 19:46:21 by aaouni            #+#    #+#             */
-/*   Updated: 2022/10/03 02:14:51 by aaouni           ###   ########.fr       */
+/*   Updated: 2022/10/03 02:46:57 by aaouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	stop_nbr_eat(t_data *data)
 			pthread_mutex_unlock(&data->philos[i].n_eat_mutex);
 			return (0);
 		}
+		pthread_mutex_unlock(&data->philos[i].n_eat_mutex);
 		i++;
 	}
 	usleep (500);
